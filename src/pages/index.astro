@@ -1,0 +1,156 @@
+---
+import { datasets, partners, presentations, publications, webapps } from "../content.js";
+import "../styles/global.css";
+
+const primaryPartners = partners.filter((partner) => partner.tier === "primary");
+const secondaryPartners = partners.filter((partner) => partner.tier === "secondary");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bird Migration Modelling resources, web apps, publications, and datasets.">
+    <title>BMM | Bird Migration Modelling</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFQJ28R6D2"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-EFQJ28R6D2");
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
+    <script src="https://kit.fontawesome.com/f15ed359e8.js" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+  </head>
+  <body>
+    <main class="layout">
+      <aside class="sidebar">
+        <div>
+          <a class="brand" href="/" aria-label="BMM home">BMM.</a>
+          <p class="intro">
+            <strong>Bird Migration Modelling</strong> brings together my research projects using weather radar to study bird migration.
+            On this website, you'll find different types of resources related to this project:
+          </p>
+          <nav class="section-nav" aria-label="Page sections">
+            <a href="#webapps"><span>01</span><i></i>Webapps</a>
+            <a href="#publications"><span>02</span><i></i>Publications</a>
+            <a href="#presentations"><span>03</span><i></i>Presentations</a>
+            <a href="#datasets"><span>04</span><i></i>Datasets</a>
+          </nav>
+        </div>
+
+        <footer class="sidebar-footer">
+          <div class="partner-block">
+            <p class="footer-label">Affiliations &amp; Support</p>
+            <div class="partner-logos partner-logos-primary">
+              {primaryPartners.map((partner) => (
+                <a href={partner.href} target="_blank" rel="noopener" aria-label={partner.label}>
+                  <img src={partner.image} alt="">
+                </a>
+              ))}
+            </div>
+            <div class="partner-logos partner-logos-secondary">
+              {secondaryPartners.map((partner) => (
+                <a href={partner.href} target="_blank" rel="noopener" aria-label={partner.label}>
+                  <img src={partner.image} alt="">
+                </a>
+              ))}
+            </div>
+          </div>
+          <ul class="social-links">
+            <li><a href="https://raphaelnussbaumer.com/" target="_blank" rel="noopener"><i class="fas fa-globe"></i><span>Personal Website</span></a></li>
+            <li><a href="https://github.com/rafnuss-postdoc" target="_blank" rel="noopener"><i class="fab fa-github"></i><span>Project Github</span></a></li>
+          </ul>
+        </footer>
+      </aside>
+
+      <div class="content">
+        <section id="webapps" class="section section-webapps">
+          <h2>Webapps</h2>
+          <div class="webapp-list hover-group">
+            {webapps.map((app) => (
+              <article class="webapp-card" itemscope itemtype="https://schema.org/CreativeWork">
+                <a href={app.href} target="_blank" rel="noopener">
+                  <img src={app.image} alt="" loading="lazy">
+                  <div>
+                    <p class="eyebrow">{app.label}</p>
+                    <h3 itemprop="name">{app.title}</h3>
+                    <p>{app.description}</p>
+                  </div>
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="publications" class="section section-publications">
+          <h2>Publications</h2>
+          <div class="publication-list hover-group">
+            {publications.map((publication) => (
+              <article class="publication" itemscope itemtype="https://schema.org/CreativeWork">
+                <a href={publication.href} target="_blank" rel="noopener">
+                  <span class="publication-logo">
+                    <img src={publication.image} alt="" loading="lazy">
+                  </span>
+                  <span>
+                    <h3 itemprop="name">{publication.title}</h3>
+                    <p>{publication.authors}</p>
+                    <strong>{publication.venue}</strong>
+                  </span>
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="presentations" class="section section-presentations">
+          <h2>Presentations</h2>
+          <div class="publication-list hover-group">
+            {presentations.map((presentation) => (
+              <article class="publication" itemscope itemtype="https://schema.org/CreativeWork">
+                <a href={presentation.href} target="_blank" rel="noopener">
+                  <span class="publication-logo">
+                    <img src={presentation.image} alt="" loading="lazy">
+                  </span>
+                  <span>
+                    <h3 itemprop="name">{presentation.title}</h3>
+                    <p>{presentation.authors}</p>
+                    <strong>{presentation.venue}</strong>
+                  </span>
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="datasets" class="section section-datasets">
+          <h2>Datasets</h2>
+          <div class="dataset-grid hover-group">
+            {datasets.map((dataset) => (
+              <article class="dataset-card" itemscope itemtype="https://schema.org/Dataset">
+                <a href={dataset.href} target="_blank" rel="noopener">
+                  <header>
+                    <p class="eyebrow">{dataset.label}</p>
+                    <img src={dataset.image} alt="" loading="lazy">
+                  </header>
+                  <h3 itemprop="name">{dataset.title}</h3>
+                  {dataset.badge && <img class="doi-badge" src={dataset.badge} alt="DOI" loading="lazy">}
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
+    </main>
+    <div class="page-fade top" aria-hidden="true"></div>
+    <div class="page-fade bottom" aria-hidden="true"></div>
+  </body>
+</html>

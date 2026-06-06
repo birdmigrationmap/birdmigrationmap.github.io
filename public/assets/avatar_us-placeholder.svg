@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">US app placeholder</title>
+  <desc id="desc">Placeholder thumbnail for the US bird migration app.</desc>
+  <rect width="320" height="320" rx="28" fill="#202022"/>
+  <rect x="22" y="22" width="276" height="276" rx="20" fill="url(#bg)" stroke="rgba(255,255,255,0.12)"/>
+  <path d="M70 207c21-34 55-57 102-69 23-6 46-9 72-10" stroke="#F5F5FA" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+  <path d="M90 233c28-15 58-24 89-28 20-2 41-2 61 0" stroke="#E10613" stroke-width="8" stroke-linecap="round" opacity=".9"/>
+  <circle cx="89" cy="121" r="10" fill="#F5F5FA"/>
+  <path d="M99 121h122" stroke="#F5F5FA" stroke-width="6" stroke-linecap="round" opacity=".7"/>
+  <path d="M89 131v62" stroke="#F5F5FA" stroke-width="6" stroke-linecap="round" opacity=".7"/>
+  <text x="44" y="78" fill="#F5F5FA" font-family="Gothic A1, Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="3">US APP</text>
+  <text x="44" y="274" fill="#949495" font-family="Gothic A1, Arial, sans-serif" font-size="16" letter-spacing="2">REPLACE WITH SCREENSHOT</text>
+  <defs>
+    <linearGradient id="bg" x1="42" y1="34" x2="272" y2="286" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2B2B31"/>
+      <stop offset="1" stop-color="#161619"/>
+    </linearGradient>
+  </defs>
+</svg>

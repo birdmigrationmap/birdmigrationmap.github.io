@@ -1,0 +1,519 @@
+:root {
+  --night: #151515;
+  --dusk: #202022;
+  --dawn: #949495;
+  --zenith: #ffffff;
+  --sunrise: #f5f5fa;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: "Gothic A1", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--night);
+  color: var(--dawn);
+  font-size: 14px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  max-width: 1440px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.brand {
+  display: inline-block;
+  color: var(--zenith);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.intro {
+  max-width: 520px;
+  margin-top: 32px;
+  line-height: 2;
+}
+
+.intro strong {
+  color: var(--zenith);
+}
+
+.section-nav {
+  display: none;
+}
+
+.sidebar-footer {
+  margin-top: 32px;
+}
+
+.partner-logos {
+  display: grid;
+  gap: 14px;
+}
+
+.partner-block {
+  max-width: 520px;
+}
+
+.footer-label {
+  margin-bottom: 14px;
+  color: var(--zenith);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.partner-logos a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 88px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.partner-logos img {
+  width: 100%;
+  object-fit: contain;
+}
+
+.partner-logos-primary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.partner-logos-primary img {
+  max-height: 52px;
+}
+
+.partner-logos-secondary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 10px;
+}
+
+.partner-logos-secondary a {
+  min-height: 56px;
+  padding: 6px 8px;
+  opacity: 0.72;
+  background: transparent;
+}
+
+.partner-logos-secondary img {
+  max-height: 28px;
+}
+
+.partner-logos a:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 32px;
+  margin-top: 22px;
+  max-width: 520px;
+  color: var(--zenith);
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.social-links a:hover {
+  font-weight: 700;
+}
+
+.content {
+  padding-top: 48px;
+}
+
+.section {
+  scroll-margin-top: 24px;
+}
+
+.section + .section {
+  margin-top: 72px;
+}
+
+.section h2 {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding-top: 24px;
+  color: var(--zenith);
+  background: linear-gradient(180deg, var(--night) 0%, rgba(21, 21, 21, 0) 100%);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.hover-group:hover .webapp-card,
+.hover-group:hover .publication,
+.hover-group:hover .dataset-card {
+  opacity: 0.5;
+}
+
+.webapp-list {
+  display: grid;
+  gap: 8px;
+  padding: 32px 0 40px;
+}
+
+.webapp-card,
+.dataset-card {
+  background: var(--dusk);
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.webapp-card:hover,
+.dataset-card:hover {
+  opacity: 1 !important;
+  transform: scale(1.1);
+}
+
+.webapp-card a {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 24px;
+  min-height: 220px;
+  padding: 40px;
+}
+
+.webapp-card img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+}
+
+.eyebrow {
+  color: var(--zenith);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+h3 {
+  margin-top: 8px;
+  color: var(--zenith);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.webapp-card p:not(.eyebrow) {
+  margin-top: 8px;
+}
+
+.publication-list {
+  display: grid;
+  gap: 48px;
+  padding-top: 80px;
+}
+
+.publication {
+  transition: opacity 0.2s ease-in-out;
+}
+
+.publication:hover {
+  opacity: 1 !important;
+}
+
+.publication a {
+  display: flex;
+  align-items: flex-start;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.publication-logo {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin-right: 24px;
+  padding: 18px;
+  border-radius: 9999px;
+  background: var(--dusk);
+  color: var(--zenith);
+  transition: transform 0.2s ease-in-out;
+}
+
+.publication:hover .publication-logo {
+  transform: scale(1.1);
+}
+
+.publication-logo img {
+  max-height: 48px;
+  object-fit: contain;
+}
+
+.publication p {
+  margin-top: 8px;
+}
+
+.publication strong {
+  display: inline-block;
+  margin-top: 8px;
+  color: var(--zenith);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.dataset-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding: 16px 0 24px;
+}
+
+.dataset-card a {
+  display: flex;
+  flex-direction: column;
+  min-height: 112px;
+  padding: 18px 20px;
+}
+
+.dataset-card header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.dataset-card header img {
+  max-width: 64px;
+  max-height: 36px;
+  object-fit: contain;
+}
+
+.dataset-card .eyebrow {
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.dataset-card h3 {
+  margin-top: 8px;
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.doi-badge {
+  width: fit-content;
+  max-width: 140px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.page-fade {
+  position: fixed;
+  left: 0;
+  z-index: 20;
+  width: 100%;
+  height: 32px;
+  pointer-events: none;
+}
+
+.page-fade.top {
+  top: 0;
+  background: linear-gradient(0deg, rgba(21, 21, 21, 0), var(--night));
+}
+
+.page-fade.bottom {
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(21, 21, 21, 0), var(--night));
+}
+
+@media (min-width: 992px) {
+  .layout {
+    position: relative;
+    flex-direction: row;
+    padding: 88px 88px 88px 32px;
+  }
+
+  .sidebar {
+    position: fixed;
+    width: 408px;
+    height: calc(100vh - 176px);
+    padding-right: 0;
+  }
+
+  .brand {
+    font-size: 64px;
+    line-height: 1;
+  }
+
+  .section-nav {
+    display: grid;
+    gap: 32px;
+    margin-top: 32px;
+    color: var(--zenith);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  .section-nav a {
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.2s ease-in-out;
+  }
+
+  .section-nav a:hover {
+    color: var(--zenith);
+  }
+
+  .section-nav span {
+    letter-spacing: 1px;
+  }
+
+  .section-nav i {
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    margin: 0 16px;
+    background: var(--dawn);
+    transition: width 0.2s ease-in-out, background 0.2s ease-in-out;
+  }
+
+  .section-nav a:hover i {
+    width: 48px;
+    background: var(--zenith);
+  }
+
+  .content {
+    position: absolute;
+    right: 88px;
+    width: min(736px, calc(100% - 584px));
+    padding-top: 0;
+  }
+
+  .section {
+    padding-top: 88px;
+    margin-top: -88px;
+  }
+
+  .section h2 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .section + .section {
+    margin-top: 80px;
+  }
+
+  .section-publications,
+  .section-presentations {
+    padding-top: 8px;
+  }
+
+  .publication-list {
+    padding-top: 72px;
+  }
+
+  .publication a {
+    align-items: center;
+  }
+
+  .publication-logo {
+    width: 120px;
+    height: 120px;
+    margin-right: 40px;
+    padding: 34px;
+  }
+
+}
+
+@media (min-width: 1280px) {
+  .sidebar {
+    width: 496px;
+  }
+
+  .content {
+    width: 736px;
+  }
+}
+
+@media (max-width: 620px) {
+  .layout {
+    padding: 32px 24px;
+  }
+
+  .partner-logos-primary,
+  .partner-logos-secondary {
+    grid-template-columns: 1fr;
+  }
+
+  .webapp-card a {
+    grid-template-columns: 1fr;
+    padding: 32px;
+  }
+
+  .webapp-card:hover,
+  .dataset-card:hover {
+    transform: none;
+  }
+}

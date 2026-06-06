@@ -1,0 +1,656 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Bird Migration Model US</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFQJ28R6D2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-EFQJ28R6D2");
+    </script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
+    <style>
+      :root {
+        --panel-bg: rgba(10, 18, 31, 0.86);
+        --panel-border: rgba(255, 255, 255, 0.12);
+        --panel-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+        --text-main: #f8fafc;
+        --text-muted: rgba(226, 232, 240, 0.72);
+        --accent: #7dd3fc;
+        --button-bg: rgba(255, 255, 255, 0.08);
+        --button-border: rgba(255, 255, 255, 0.14);
+        --slider-track: rgba(148, 163, 184, 0.3);
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family:
+          "Gothic A1",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+
+      #map {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+      }
+
+      #menu {
+        position: absolute;
+        top: 24px;
+        left: 24px;
+        z-index: 2;
+        width: min(360px, calc(100vw - 48px));
+        padding: 18px 18px 16px;
+        border: 1px solid var(--panel-border);
+        border-radius: 20px;
+        background: var(--panel-bg);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--panel-shadow);
+        color: var(--text-main);
+      }
+
+      #menu h1,
+      #menu p,
+      #menu label {
+        margin: 0;
+      }
+
+      .menu-header {
+        margin-bottom: 14px;
+      }
+
+      .menu-eyebrow {
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .menu-title {
+        margin-top: 8px;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1.1;
+      }
+
+      .menu-subtitle {
+        margin-top: 6px;
+        color: var(--text-muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .control-group-secondary {
+        margin-top: 14px;
+      }
+
+      .secondary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .control-select {
+        width: 100%;
+        height: 38px;
+        padding: 0 10px;
+        border: 1px solid var(--button-border);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text-main);
+        font: inherit;
+        font-size: 13px;
+        outline: none;
+      }
+
+      .control-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      .control-label {
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .control-value {
+        color: var(--accent);
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .slider {
+        width: 100%;
+        appearance: none;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--slider-track);
+        outline: none;
+      }
+
+      .slider::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(10, 18, 31, 0.8);
+        border-radius: 50%;
+        background: linear-gradient(180deg, #bae6fd, #38bdf8);
+        box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
+        cursor: pointer;
+      }
+
+      .slider::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        border: 2px solid rgba(10, 18, 31, 0.8);
+        border-radius: 50%;
+        background: linear-gradient(180deg, #bae6fd, #38bdf8);
+        box-shadow: 0 2px 8px rgba(56, 189, 248, 0.35);
+        cursor: pointer;
+      }
+
+      .timeline-action {
+        flex: 0 0 auto;
+        height: 44px;
+        min-width: 116px;
+        padding: 0 16px;
+        border: 1px solid var(--button-border);
+        border-radius: 14px;
+        background: var(--button-bg);
+        color: var(--text-main);
+        font: inherit;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          transform 0.18s ease,
+          background 0.18s ease,
+          border-color 0.18s ease;
+      }
+
+      .timeline-action:hover {
+        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(125, 211, 252, 0.35);
+      }
+
+      .timeline-action:active {
+        transform: translateY(0);
+      }
+
+      #playpause.is-playing {
+        background: rgba(56, 189, 248, 0.18);
+        border-color: rgba(56, 189, 248, 0.45);
+      }
+
+      .timeline-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      #time-label {
+        flex: 1 1 auto;
+        color: var(--text-main);
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+
+      .menu-footer {
+        margin-top: 14px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        color: var(--text-muted);
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
+      .mapboxgl-ctrl-group {
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+      }
+
+      .mapboxgl-ctrl-attrib {
+        font-family: inherit;
+        font-size: 11px;
+      }
+
+      @media (max-width: 720px) {
+        #menu {
+          top: auto;
+          right: 12px;
+          bottom: 12px;
+          left: 12px;
+          width: auto;
+          padding: 16px 14px 14px;
+          border-radius: 18px;
+        }
+
+        .menu-title {
+          font-size: 18px;
+        }
+
+        .menu-subtitle,
+        .control-label,
+        #time-label {
+          font-size: 12px;
+        }
+
+        .timeline-action {
+          min-width: 104px;
+          height: 40px;
+          font-size: 14px;
+        }
+
+        .secondary-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+    <div id="menu">
+      <div class="menu-header">
+        <p class="menu-eyebrow">Bird Migration Modelling</p>
+        <h1 class="menu-title">US Migration Map</h1>
+        <p class="menu-subtitle">
+          Explore seasonal bird migration across the contiguous United States.
+        </p>
+      </div>
+
+      <div class="control-group">
+        <div class="control-head">
+          <label class="control-label" for="video-source">Overlay source</label>
+        </div>
+        <select id="video-source" class="control-select">
+          <optgroup label="Seasonal years">
+            <option value="2010">2010</option>
+            <option value="2011">2011</option>
+            <option value="2012">2012</option>
+            <option value="2013">2013</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+          </optgroup>
+          <optgroup label="Daily composites">
+            <option value="estimation_daily">Estimation</option>
+            <option value="simulation_daily">Simulation</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <div class="timeline-meta">
+          <span id="time-label">Loading date</span>
+          <button id="playpause" class="timeline-action" type="button" aria-label="Play or pause overlay">
+            Play
+          </button>
+        </div>
+        <input id="slider-time" class="slider" type="range" min="0" max="1000" value="0" step="1" />
+      </div>
+
+      <div class="control-group-secondary">
+        <div class="secondary-grid">
+          <div class="control-group">
+            <div class="control-head">
+              <label class="control-label" for="slider-opacity">Opacity</label>
+              <span class="control-value" id="opacity-label">75%</span>
+            </div>
+            <input
+              id="slider-opacity"
+              class="slider"
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              value="75"
+            />
+          </div>
+
+          <div class="control-group">
+            <div class="control-head">
+              <label class="control-label" for="slider-speed">Playback</label>
+              <span class="control-value" id="speed-label">x1</span>
+            </div>
+            <input
+              id="slider-speed"
+              class="slider"
+              type="range"
+              min="-2"
+              max="2"
+              step="1"
+              value="0"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      mapboxgl.accessToken = "pk.eyJ1IjoicmFmbnVzcyIsImEiOiIzMVE1dnc0In0.3FNMKIlQ_afYktqki-6m0g";
+
+      var url = new URL(window.location.href);
+      var currentSourceKey = url.searchParams.get("y") ? url.searchParams.get("y") : "2017";
+      var timelineSteps = 1000;
+      var sourceOptions = {
+        2010: {
+          label: "Year 2010",
+          chip: "2010",
+          url: "/US/assets/2010.webm",
+          type: "year",
+          year: 2010,
+          coordinates: [[-125, 50], [-67, 50], [-67, 23], [-125, 23]],
+        },
+        2011: {
+          label: "Year 2011",
+          chip: "2011",
+          url: "/US/assets/2011.webm",
+          type: "year",
+          year: 2011,
+          coordinates: [[-125, 50], [-67, 50], [-67, 23], [-125, 23]],
+        },
+        2012: {
+          label: "Year 2012",
+          chip: "2012",
+          url: "/US/assets/2012.webm",
+          type: "year",
+          year: 2012,
+          coordinates: [[-125, 50], [-67, 50], [-67, 23], [-125, 23]],
+        },
+        2013: {
+          label: "Year 2013",
+          chip: "2013",
+          url: "/US/assets/2013.webm",
+          type: "year",
+          year: 2013,
+          coordinates: [[-125, 50], [-67, 50], [-67, 23], [-125, 23]],
+        },
+        2014: {
+          label: "Year 2014",
+          chip: "2014",
+          url: "/US/assets/2014.webm",
+          type: "year",
+          year: 2014,
+          coordinates: [[-125, 50], [-67, 50], [-67, 23], [-125, 23]],
+        },
+        2015: {
+          label: "Year 2015",
+          chip: "2015",
+          url: "/US/assets/2015.webm",
+          type: "year",
+          year: 2015,
+          coordinates: [[-125, 50], [-67, 50], [-67, 23], [-125, 23]],
+        },
+        2016: {
+          label: "Year 2016",
+          chip: "2016",
+          url: "/US/assets/2016.webm",
+          type: "year",
+          year: 2016,
+          coordinates: [[-125, 50], [-67, 50], [-67, 23], [-125, 23]],
+        },
+        2017: {
+          label: "Year 2017",
+          chip: "2017",
+          url: "/US/assets/2017.webm",
+          type: "year",
+          year: 2017,
+          coordinates: [[-125, 50], [-67, 50], [-67, 23], [-125, 23]],
+        },
+        estimation_daily: {
+          label: "Daily Estimation",
+          chip: "Estimate",
+          url: "/US/assets/estimation_daily.webm",
+          type: "daily",
+          hours: 24,
+          coordinates: [[-124.7, 49.55], [-67.4, 49.55], [-67.4, 22.55], [-124.7, 22.55]],
+        },
+        simulation_daily: {
+          label: "Daily Simulation",
+          chip: "Simulation",
+          url: "/US/assets/simulation_daily.webm",
+          type: "daily",
+          hours: 24,
+          coordinates: [[-124.7, 49.4], [-67.2, 49.4], [-67.2, 22.4], [-124.7, 22.4]],
+        },
+      };
+      if (!sourceOptions[currentSourceKey]) currentSourceKey = "2017";
+      var estimationVideoUrl = sourceOptions[currentSourceKey].url;
+
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/satellite-v9",
+        minZoom: 2,
+        zoom: 3,
+        center: [-105.5411291, 38.9607531],
+      });
+      map.addControl(new mapboxgl.NavigationControl(), "top-right");
+      map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
+
+      document.getElementById("slider-opacity").addEventListener("input", (e) => {
+        document.getElementById("opacity-label").innerText = e.target.value + "%";
+        map.setPaintProperty(
+          "video-estimation",
+          "raster-opacity",
+          parseInt(e.target.value, 10) / 100,
+        );
+      });
+
+      document.getElementById("slider-speed").addEventListener("input", (e) => {
+        let speed = Math.pow(2, e.target.value);
+        videoEstHTML.playbackRate = speed;
+        document.getElementById("speed-label").innerText = "x" + speed;
+      });
+
+      document.getElementById("slider-time").addEventListener("input", (e) => {
+        setVideoTimeFromFraction(parseInt(e.target.value, 10) / timelineSteps);
+      });
+
+      var videoEstHTML = null;
+      var sourceSelect = document.getElementById("video-source");
+      var playPauseButton = document.getElementById("playpause");
+      var playRequestToken = 0;
+
+      function formatDailyTime(seconds) {
+        var totalSeconds = Math.max(0, Math.floor(seconds || 0));
+        var hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
+        var minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+        var secs = String(totalSeconds % 60).padStart(2, "0");
+        return hours + ":" + minutes + ":" + secs;
+      }
+
+      function getVideoFraction() {
+        if (!videoEstHTML || !videoEstHTML.duration) return 0;
+        return Math.min(1, Math.max(0, videoEstHTML.currentTime / videoEstHTML.duration));
+      }
+
+      function setVideoTimeFromFraction(fraction) {
+        if (!videoEstHTML || !videoEstHTML.duration) return;
+        seekVideoToTime(Math.min(1, Math.max(0, fraction)) * videoEstHTML.duration);
+      }
+
+      function seekVideoToTime(nextTime) {
+        if (!videoEstHTML || !videoEstHTML.duration) return;
+        var boundedTime = Math.min(videoEstHTML.duration, Math.max(0, nextTime));
+        videoEstHTML.currentTime = boundedTime;
+        map.triggerRepaint();
+      }
+
+      function updateSourceUi() {
+        sourceSelect.value = currentSourceKey;
+        url.searchParams.set("y", currentSourceKey);
+        history.replaceState({}, "", url);
+      }
+
+      function myVideoUpdate() {
+        let r = getVideoFraction();
+        document.getElementById("slider-time").value = Math.round(r * timelineSteps);
+        var sourceConfig = sourceOptions[currentSourceKey];
+        if (sourceConfig.type === "year") {
+          var date = new Date(sourceConfig.year, 0);
+          new Date(date.setDate(r * 366 + 2));
+          document.getElementById("time-label").innerHTML = date.toLocaleDateString("en-US", {
+            weekday: undefined,
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+          return;
+        }
+
+        document.getElementById("time-label").innerText = formatDailyTime(
+          r * sourceConfig.hours * 3600,
+        );
+      }
+
+      function updatePlayPauseUi() {
+        if (!videoEstHTML) {
+          playPauseButton.innerText = "Play";
+          playPauseButton.classList.remove("is-playing");
+          return;
+        }
+
+        if (videoEstHTML.paused) {
+          playPauseButton.innerText = "Play";
+          playPauseButton.classList.remove("is-playing");
+          return;
+        }
+
+        playPauseButton.innerText = "Pause";
+        playPauseButton.classList.add("is-playing");
+      }
+
+      function requestVideoPlay() {
+        if (!videoEstHTML) return;
+        var thisPlayRequest = ++playRequestToken;
+        var playPromise = videoEstHTML.play();
+        updatePlayPauseUi();
+        if (!playPromise || typeof playPromise.catch !== "function") return;
+
+        playPromise.catch(function (error) {
+          var isSuperseded = thisPlayRequest !== playRequestToken;
+          if (error && error.name === "AbortError" && isSuperseded) return;
+          if (error && error.name === "AbortError" && videoEstHTML.paused) return;
+          console.error(error);
+        });
+      }
+
+      function requestVideoPause() {
+        if (!videoEstHTML) return;
+        playRequestToken += 1;
+        videoEstHTML.pause();
+        updatePlayPauseUi();
+      }
+
+      function swapVideoSource(nextSourceKey) {
+        if (!sourceOptions[nextSourceKey] || nextSourceKey === currentSourceKey || !videoEstHTML)
+          return;
+
+        var wasPlaying = videoEstHTML && !videoEstHTML.paused;
+        requestVideoPause();
+        videoEstHTML = null;
+        currentSourceKey = nextSourceKey;
+        updateSourceUi();
+        buildVideoOverlay(currentSourceKey);
+        document.getElementById("slider-time").value = 0;
+        document.getElementById("time-label").innerText = "Loading timeline";
+        updatePlayPauseUi();
+        waitForVideoElement();
+
+        function waitForReloadedVideo() {
+          if (!videoEstHTML || !videoEstHTML.duration) {
+            requestAnimationFrame(waitForReloadedVideo);
+            return;
+          }
+
+          videoEstHTML.currentTime = 0;
+          myVideoUpdate();
+          if (wasPlaying) requestVideoPlay();
+        }
+
+        waitForReloadedVideo();
+      }
+
+      function bindVideoControls(videoEl) {
+        videoEstHTML = videoEl;
+        videoEstHTML.ontimeupdate = myVideoUpdate;
+        videoEstHTML.onseeked = function () {
+          myVideoUpdate();
+          map.triggerRepaint();
+        };
+        videoEstHTML.onplay = updatePlayPauseUi;
+        videoEstHTML.onpause = updatePlayPauseUi;
+        myVideoUpdate();
+        updatePlayPauseUi();
+      }
+
+      function waitForVideoElement() {
+        var videoSource = map.getSource("video-estimation");
+        var videoEl = videoSource && videoSource.getVideo ? videoSource.getVideo() : null;
+        if (!videoEl) {
+          requestAnimationFrame(waitForVideoElement);
+          return;
+        }
+
+        bindVideoControls(videoEl);
+      }
+
+      function buildVideoOverlay(sourceKey) {
+        if (map.getLayer("video-estimation")) map.removeLayer("video-estimation");
+        if (map.getSource("video-estimation")) map.removeSource("video-estimation");
+
+        map.addSource("video-estimation", {
+          type: "video",
+          urls: [sourceOptions[sourceKey].url],
+          coordinates: sourceOptions[sourceKey].coordinates,
+        });
+
+        map.addLayer({
+          id: "video-estimation",
+          type: "raster",
+          source: "video-estimation",
+          paint: {
+            "raster-opacity": parseInt(document.getElementById("slider-opacity").value, 10) / 100,
+          },
+        });
+      }
+
+      map.on("load", () => {
+        buildVideoOverlay(currentSourceKey);
+        updateSourceUi();
+        waitForVideoElement();
+        sourceSelect.addEventListener("change", function (event) {
+          swapVideoSource(event.target.value);
+        });
+        playPauseButton.addEventListener("click", function () {
+          if (videoEstHTML.paused) {
+            requestVideoPlay();
+          } else {
+            requestVideoPause();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

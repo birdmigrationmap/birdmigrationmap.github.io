@@ -67,6 +67,10 @@ let dens, u, v, rain;
 var loaded_count=0;
 var load_nb = 5;
 
+function maybeInflate(binData) {
+	return binData[0] === 0x1f && binData[1] === 0x8b ? pako.inflate(binData) : binData;
+}
+
 
 var oReq = new XMLHttpRequest();
 oReq.responseType = "arraybuffer";
@@ -74,7 +78,7 @@ oReq.responseType = "arraybuffer";
 oReq.onload = function (oEvent) {
 	if (oReq.response) {
 		var binData = new Uint8Array(oReq.response);
-		var byteArray = pako.inflate(binData);
+		var byteArray = maybeInflate(binData);
 		byteArray=new Int16Array(byteArray.buffer, byteArray.byteOffset, byteArray.byteLength/2);
 		
 		for (var i = 1; i < byteArray.length; i++) {
@@ -117,7 +121,7 @@ oReq2.onload = function (oEvent) {
 	if (oReq2.response) {
 		var binData = new Uint8Array(oReq2.response);
 
-		var byteArray = pako.inflate(binData);
+		var byteArray = maybeInflate(binData);
 
 
 		const chunk = 2025;
@@ -415,10 +419,10 @@ map.on('load', function() {
 			Plotly.Plots.resize(gd_density);
 		})
 		
-		d3colors = Plotly.d3.scale.category10();
+		d3colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
 		col=[]
 		for (var i = 0; i < 11; i += 1) {
-			col.push(d3colors(i));
+			col.push(d3colors[i % d3colors.length]);
 		}
 		
 		jQuery.getJSON('./assets/MTR.json',function(MTR){

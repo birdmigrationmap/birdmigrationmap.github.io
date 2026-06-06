@@ -1,0 +1,488 @@
+<!doctype html>
+<html>
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFQJ28R6D2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-EFQJ28R6D2");
+    </script>
+
+    <meta charset="utf-8" />
+    <title>Bird Migration Map 2018</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="shortcut icon" href="/assets/favicon-16x16.png" type="image/x-icon" />
+
+    <!-- Script and style -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script src="./assets/colorbrewer.js"></script>
+    <script async defer src="https://api.mapbox.com/mapbox-assembly/v0.26.0/assembly.js"></script>
+    <link href="https://api.mapbox.com/mapbox-assembly/v0.26.0/assembly.min.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/f15ed359e8.js" crossorigin="anonymous"></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/2.9.3/intro.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.4/raphael-min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"
+    ></script>
+    <script src="https://cdn.plot.ly/plotly-3.5.1.min.js"></script>
+    <link href="https://unpkg.com/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet" />
+    <script src="./assets/pako.js" type="text/javascript"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"
+      integrity="sha512-OqcrADJLG261FZjar4Z6c4CfLqd861A3yPNMb+vRQ2JwzFT49WT4lozrh3bcKxHxtDTgNiqgYbEUStzvZQRfgQ=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"
+      integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ=="
+      crossorigin="anonymous"
+    ></script>
+    <!--<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.css' type='text/css' />
+	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.0.9/mapbox-gl-draw.js'></script>
+	<script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>-->
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="map"></div>
+
+    <div
+      id="modal-loading"
+      class="z5 fixed top right bottom left scroll-auto bg-darken25 viewport-full"
+    >
+      <div
+        class="flex-parent flex-parent--center-main flex-parent--center-cross pt36"
+        id="modal-bkg"
+      >
+        <div class="flex-child bg-white round relative w600">
+          <button class="absolute top right px12 py12" id="modal-close" style="display: none">
+            <svg class="icon link color-darken50"><use xlink:href="#icon-close"></use></svg>
+          </button>
+          <div
+            class="text-center align-middle bg-red-500 text-white px-4 py-6 md:hidden"
+            role="alert"
+          >
+            <svg class="icon m-auto h60 w60"><use xlink:href="#icon-alert" /></svg>
+            <p>Sorry, this website was not designed to work on mobiles.</p>
+            <p>Please come back from your computer or tablet!</p>
+          </div>
+          <div class="px24 py24 hidden md:block">
+            <div class="txt-l" id="modal-title">Loading the data...</div>
+            <div
+              class="h12 bg-darken10 relative round-full flex-parent--center-main mb12"
+              id="progressbardiv"
+            >
+              <div class="absolute h12 bg-green-light round-full" id="progressbar"></div>
+            </div>
+            <div class="txt-l mb12">Some quick tips to navigate the map:</div>
+            <div class="txt-m">
+              <ul class="fa-ul">
+                <li>
+                  <span class="fa-li"><i class="far fa-hand-pointer"></i></span>Click on map or
+                  radar to display current values of density and flight speed.
+                </li>
+              </ul>
+              <b>Time bar (bottom):</b>
+              <ul class="fa-ul">
+                <li>
+                  <span class="fa-li"><i class="fas fa-stopwatch color-green"></i></span>Change the
+                  time resolution of the animation
+                </li>
+
+                <li>
+                  <span class="fa-li"><i class="fas fa-tachometer-alt color-green"></i></span>Change
+                  the speed of animation (frames/sec)
+                </li>
+                <li>
+                  <span class="fa-li"><i class="fas fa-step-forward color-green"></i></span>Skip or
+                  display daytime data
+                </li>
+              </ul>
+
+              <b>Layer selection (top-right):</b>
+              <div class="txt-ul">
+                <div class="txt-li">
+                  Adjust the density colorbar (linear/log scale, colormap, range and opacity)
+                </div>
+                <div class="txt-li">
+                  Display or hide radar data (actual measurements of the radar)
+                </div>
+                <div class="txt-li">Apply a mask for rain (> 1mm/hr).</div>
+                <!--<div class='txt-li'><kbd class='txt-kbd'>&uarr;</kbd>: Faster</div>
+							<div class='txt-li'><kbd class='txt-kbd'>&darr;</kbd>: move to the next frame</div>-->
+              </div>
+
+              <b>Keyboard shortcuts:</b>
+              <div class="txt-ul">
+                <div class="txt-li"><kbd class="txt-kbd">Space</kbd>: Pause/play the animation</div>
+                <div class="txt-li">
+                  <kbd class="txt-kbd">&larr;</kbd>: Move to the previous frame
+                </div>
+                <div class="txt-li"><kbd class="txt-kbd">&rarr;</kbd>: Move to the next frame</div>
+                <!--<div class='txt-li'><kbd class='txt-kbd'>&uarr;</kbd>: Faster</div>
+							<div class='txt-li'><kbd class='txt-kbd'>&darr;</kbd>: move to the next frame</div>-->
+              </div>
+            </div>
+
+            <button class="btn btn--green mt24" disabled id="btn-go">Go!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute top-ml left z1 w240-ml px12 py12-ml hidden md:block">
+      <div
+        class="flex-parent flex-parent--column viewport-third h-auto-ml hmax-full bg-white round-ml shadow-darken10"
+      >
+        <div class="px12 py12 scroll-auto">
+          <h3 class="txt-m txt-bold mb6">Bird Migration Map 2018</h3>
+          <p>
+            Visualize the mass movement of bird migration accross western Europe for the entire 2018
+            year.
+          </p>
+          <button
+            class="flex-parent m-auto btn btn--s btn--stroke btn--green round mt-4"
+            id="howtonav"
+          >
+            <svg class="icon h18 w18 mr3"><use xlink:href="#icon-info" /></svg> How to navigate?
+          </button>
+        </div>
+        <footer class="px12 py12 bg-gray-faint round-b-ml txt-s">
+          <a
+            class="link"
+            href="https://www.researchgate.net/project/Bird-Migration-Modelling-BMM"
+            target="_blank"
+            ><i class="fab fa-researchgate"></i>/Bird-Migration-Modelling-BMM</a
+          ><br />
+          <a class="link" href="https://rafnuss-postdoc.github.io/BMM/" target="_blank"
+            ><i class="fab fa-github"></i>/Rafnuss-PostDoc/BMM</a
+          ><br />
+          <a
+            class="link"
+            href="https://royalsocietypublishing.org/doi/10.1098/rsif.2021.0194"
+            target="_blank"
+            ><i class="fas fa-lock-open"></i> Publication</a
+          >
+        </footer>
+      </div>
+    </div>
+
+    <div class="fixed top right w240 txt-s mx12 my12 hidden md:block">
+      <div class="round bg-white shadow-darken10 px12 py12">
+        <div class="flex-parent flex-parent--space-between-main">
+          <div class="flex-child">
+            <b>Bird density</b> <span class="txt-xs">[bird/km<sup class="txt-sup">2</sup>]</span>
+          </div>
+          <div class="flex-child">
+            <label class="switch-container">
+              <input type="checkbox" id="logscale" checked />
+              <div class="switch mr6 top"></div>
+              Log scale
+            </label>
+          </div>
+        </div>
+        <div class="round">
+          <label><input class="mt6" name="radio-bar" type="radio" value="YlOrBr" checked /></label>
+          <label><input class="mt6" name="radio-bar" type="radio" value="YlGn" /></label>
+          <label><input class="mt6" name="radio-bar" type="radio" value="BrBG" /></label>
+          <label><input class="mt6" name="radio-bar" type="radio" value="Spectral" /></label>
+        </div>
+        <div class="grid txt-xs">
+          <div class="flex-child--grow">
+            <input
+              type="number"
+              min="1"
+              class="input textarea--s w60 caxis"
+              id="caxismin"
+              value="1"
+            />
+          </div>
+          <div class="flex-child--grow align-r">
+            <input
+              type="number"
+              min="1"
+              class="input textarea--s w60 caxis"
+              id="caxismax"
+              value="100"
+            />
+          </div>
+        </div>
+        <div class="flex-parent pb6 flex-parent--center-cross">
+          <div class="flex-child flex-child--no-shrink pr6">Opacity</div>
+          <div class="flex-child flex-child--grow">
+            <div class="range range--s">
+              <input type="range" id="opacity" min="0" max="1" step="0.1" value="0.7" />
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-2"><b>Bird flight</b> <span class="txt-xs">[m/s]</span></div>
+        <div class="grid">
+          <div class="col m-auto align-center">
+            <img
+              src="./assets/right-arrow-grey.png"
+              class="inline"
+              style="width: 10.8px; transform: rotate(-30deg)"
+            />
+          </div>
+          <div class="col m-auto align-center">
+            <img
+              src="./assets/right-arrow-grey.png"
+              class="inline"
+              style="width: 16.2px; transform: rotate(-30deg)"
+            />
+          </div>
+          <div class="col m-auto align-center">
+            <img
+              src="./assets/right-arrow-grey.png"
+              class="inline"
+              style="width: 21.6px; transform: rotate(-30deg)"
+            />
+          </div>
+          <div class="col m-auto align-center">
+            <img
+              src="./assets/right-arrow-grey.png"
+              class="inline"
+              style="width: 27px; transform: rotate(-30deg)"
+            />
+          </div>
+          <div class="col m-auto align-center">
+            <img
+              src="./assets/right-arrow-grey.png"
+              class="inline"
+              style="width: 32.4px; transform: rotate(-30deg)"
+            />
+          </div>
+        </div>
+        <div class="grid txt-xs">
+          <div class="col m-auto align-center">5</div>
+          <div class="col"></div>
+          <div class="col m-auto align-center">10</div>
+          <div class="col"></div>
+          <div class="col m-auto align-center">15</div>
+        </div>
+        <div class="flex-parent pb6 flex-parent--center-cross">
+          <div class="flex-child flex-child--no-shrink pr6">Zoom Level</div>
+          <div class="flex-child flex-child--grow">
+            <div class="range range--s">
+              <input type="range" id="zoom-level" min="-2" max="2" step="1" value="0" />
+            </div>
+          </div>
+        </div>
+
+        <div class="flex-parent flex-parent--space-between-main mt-2">
+          <div class="flex-child">
+            <b>Radar</b>
+          </div>
+          <div class="flex-child--grow pl6">
+            <div
+              class="bg-blue inline-block round-full border border--black"
+              style="height: 14px; width: 14px"
+            ></div>
+            <img
+              src="./assets/right-arrow-black.png"
+              class="inline"
+              style="width: 24px; transform: translate(-22px, -5px) rotate(-45deg)"
+            />
+          </div>
+        </div>
+
+        <label class="switch-container">
+          <input type="checkbox" id="radar" />
+          <div class="switch mr6 top"></div>
+          Hide/show radars
+        </label>
+
+        <label class="switch-container">
+          <input type="checkbox" id="rain" />
+          <div class="switch mr6 top"></div>
+          Hide/show rain
+        </label>
+      </div>
+      <div id="tt-nb-div" class="night mt12 round">
+        <div id="gauge"></div>
+        <i id="tt-sun" class="fas fa-2x fa-moon"></i>
+      </div>
+    </div>
+
+    <div class="fixed w-full bottom py12 px12 hidden md:block">
+      <div class="h300 bg-white" id="timelinediv" style="display: none">
+        <!--<div class="flex-parent-inline absolute" id="tablinks-div">
+				<button class="tablinks btn btn--pill btn--pill-hl is-active" onclick="openTab(event, 'plot_density')">Density</button>
+				<button class="tablinks btn btn--pill btn--pill-hc" onclick="openTab(event, 'plot_sum')">Sum</button>
+				<button class="tablinks btn btn--pill btn--pill-hr" onclick="openTab(event, 'plot_mtr')">Flux</button>
+			</div>-->
+        <div id="plot_density" class="tabcontent"></div>
+        <!--<div id="plot_sum" class="tabcontent " style="display: none;"></div>
+				<div id="plot_mtr" class="tabcontent " style="display: none;"></div>-->
+      </div>
+      <div
+        class="flex-parent bg-white flex-parent--row flex-parent--center-cross border border--gray-light round"
+      >
+        <div class="tooltip">
+          <button
+            class="flex-child py12 px18 border-r border--gray-light bg-white bg-green-light-on-hover cursor-pointer round-l"
+            onclick="bweButton()"
+          >
+            <i class="fas fa-backward color-green"></i>
+          </button>
+          <span class="tooltiptext">Step back</span>
+        </div>
+        <div class="tooltip">
+          <button
+            class="flex-child py12 px18 border-r border--gray-light bg-white bg-green-light-on-hover cursor-pointer"
+            onclick="ppeButton()"
+          >
+            <i id="ppeButton-i" class="fas fa-pause color-green"></i>
+          </button>
+          <span class="tooltiptext">Play/Pause</span>
+        </div>
+        <div class="tooltip">
+          <button
+            class="flex-child py12 px18 border-r border--gray-light bg-white bg-green-light-on-hover cursor-pointer"
+            onclick="fweButton()"
+          >
+            <i class="fas fa-forward color-green"></i>
+          </button>
+          <span class="tooltiptext">Step forward</span>
+        </div>
+        <div class="tooltip">
+          <button
+            class="flex-child py12 px18 border-r border--gray-light bg-white bg-green-light-on-hover cursor-pointer btna active"
+            id="neeButton"
+            onclick="neeButton()"
+          >
+            <i class="fas fa-step-forward color-green"></i>
+          </button>
+          <span class="tooltiptext">Skip day</span>
+        </div>
+        <div
+          class="flex-child flex-child--no-shrink py12 px12 border-r border--gray-light bg-white"
+        >
+          <span id="date">01/01/2018&nbsp;00:00</span>
+        </div>
+        <div class="tooltip">
+          <div class="flex-parent py12 px18 border-r border--gray-light bg-white">
+            <i class="fas fa-stopwatch color-green"></i>
+            <div class="select-container w60">
+              <select
+                id="resolution"
+                class="select select--s"
+                onchange="resolution = parseInt(this.value)"
+              >
+                <option value="1">15min</option>
+                <option value="4" selected>1hr</option>
+                <option value="12">3hrs</option>
+                <option value="96">1day</option>
+              </select>
+              <div class="select-arrow"></div>
+            </div>
+          </div>
+          <span class="tooltiptext">Resolution</span>
+        </div>
+        <div class="tooltip">
+          <button
+            class="flex-child py12 px18 border-r border--gray-light bg-white bg-green-light-on-hover cursor-pointer btna"
+            id="tlButton"
+          >
+            <i class="fas fa-chart-line color-green"></i>
+          </button>
+          <span class="tooltiptext">Timeline</span>
+        </div>
+        <div
+          class="flex-child pb6 px18 border-r border--gray-light flex-child--grow bg-white w-full"
+          style="padding-top: 5px !important; padding-bottom: 1px !important"
+        >
+          <div class="grid interest-box">
+            <div class="tooltip" style="margin-left: 78.1%">
+              <div class="interest" style="width: 19px"></div>
+              <span class="tooltiptext tooltiptext-interest"
+                >16/19-10: largest autumn migration</span
+              >
+            </div>
+            <div class="tooltip" style="margin-left: 24.4%; margin-top: -7px">
+              <div class="interest" style="width: 2px"></div>
+              <span class="tooltiptext tooltiptext-interest">29/30-04: peak spring migration</span>
+            </div>
+          </div>
+          <input
+            id="slider"
+            class="slider w-full h12 bg-darken10 round-full"
+            type="range"
+            min="0"
+            max="35071"
+            step="1"
+            value="8236"
+            onchange="sliderchange(event)"
+          />
+          <div class="grid txt-xs mx-neg12 my-neg2 flex-parent--space-between-main">
+            <p><span class="ticks"></span>01-Jan</p>
+            <p><span class="ticks"></span>01-Feb</p>
+            <p><span class="ticks"></span>01-Mar</p>
+            <p><span class="ticks"></span>01-Apr</p>
+            <p><span class="ticks"></span>01-May</p>
+            <p><span class="ticks"></span>01-Jun</p>
+            <p><span class="ticks"></span>01-Jul</p>
+            <p><span class="ticks"></span>01-Aug</p>
+            <p><span class="ticks"></span>01-Sep</p>
+            <p><span class="ticks"></span>01-Oct</p>
+            <p><span class="ticks"></span>01-Nov</p>
+            <p><span class="ticks"></span>01-Dec</p>
+            <p><span class="ticks"></span>01-Jan</p>
+          </div>
+        </div>
+        <div class="range py24 px12 border-r border--gray-light bg-white round-r" id="speed-div">
+          <i class="fas fa-tachometer-alt color-green"></i>
+          <div class="tooltip range">
+            <input
+              id="speed"
+              class="pl6"
+              type="range"
+              min="1"
+              max="10"
+              step="1"
+              value="3"
+              onchange="speed = parseInt(this.value)"
+              style="display: none"
+            />
+            <span class="tooltiptext" id="speed-toltip">5 frames/sec</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <footer>
+    <script src="./bmm2018.js"></script>
+    <link href="./bmm2018.css" rel="stylesheet" />
+  </footer>
+</html>
