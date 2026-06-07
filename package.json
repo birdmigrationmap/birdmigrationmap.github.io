@@ -1,6 +1,7 @@
 {
   "name": "birdmigrationmap-github-io",
   "version": "1.0.0",
+  "description": "Organization website for Bird Migration Map, featuring research web apps, publications, presentations, and datasets.",
   "private": true,
   "type": "module",
   "engines": {
