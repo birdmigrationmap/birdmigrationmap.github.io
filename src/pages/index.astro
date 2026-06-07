@@ -1,6 +1,6 @@
 ---
 import { datasets, partners, presentations, publications, webapps } from "../content.js";
-import "../styles/global.css";
+import globalCss from "../styles/global.css?raw";
 
 const primaryPartners = partners.filter((partner) => partner.tier === "primary");
 const secondaryPartners = partners.filter((partner) => partner.tier === "secondary");
@@ -27,14 +27,15 @@ const secondaryPartners = partners.filter((partner) => partner.tier === "seconda
     <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
     <script src="https://kit.fontawesome.com/f15ed359e8.js" crossorigin="anonymous"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+    <style is:inline set:html={globalCss}></style>
   </head>
   <body>
     <main class="layout">
       <aside class="sidebar">
         <div>
-          <a class="brand" href="/" aria-label="BMM home">BMM.</a>
+          <a class="brand" href="./" aria-label="BMM home">BMM.</a>
           <p class="intro">
             <strong>Bird Migration Modelling</strong> brings together my research projects using weather radar to study bird migration.
             On this website, you'll find different types of resources related to this project:
