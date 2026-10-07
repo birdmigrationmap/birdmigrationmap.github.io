@@ -75,7 +75,7 @@ export const publications = [
     authors: "Nussbaumer, R., Schmid, B., Bauer, S., Liechti, F.",
     venue: "Remote Sensing. 2021. 13(10).",
     href: "https://doi.org/10.3390/rs13101989",
-    image: "https://www.mdpi.com/img/journals/remotesensing-logo-sq.png",
+    image: "assets/logo_remotesensing.png",
   },
   {
     title:
@@ -83,7 +83,7 @@ export const publications = [
     authors: "Nussbaumer, R., Benoit, L., Mariethoz, G., Liechti, F., Bauer, S., Schmid, B.",
     venue: "Remote Sensing 2019. 11:2233.",
     href: "https://doi.org/10.3390/rs11192233",
-    image: "https://www.mdpi.com/img/journals/remotesensing-logo-sq.png",
+    image: "assets/logo_remotesensing.png",
   },
 ];
 
@@ -97,7 +97,7 @@ export const presentations = [
     image: "assets/logo_IOC.png",
   },
   {
-    title: "Detection du flux migratoire nocturne par les radars meteorologique europeens",
+    title: "Détection du flux migratoire nocturne par les radars météorologiques européens",
     authors: "Nussbaumer, R., Schmid, B., Liechti, F.",
     venue: "Colloque Migration 2020. Ligue de la Protection des Oiseaux (LPO)",
     href: "https://youtu.be/Gc90yT82ke8",
@@ -108,15 +108,14 @@ export const presentations = [
     authors: "Nussbaumer, R., Benoit, L., Mariethoz, G., Liechti, F., Schmid, B.",
     venue: "BOU 2019, Warwick.",
     href: "https://doi.org/10.13140/RG.2.2.11249.53605",
-    image:
-      "https://terravivagrants.org/wp-content/uploads/2016/06/British_Ornithologists_Union.png",
+    image: "assets/logo_BOU.png",
   },
   {
     title: "How many birds are on the move? Towards quantitative species-specific migration models",
     authors: "Schmid, B., Nussbaumer, R., Schmid, H.",
     venue: "Feb. 2019, EuroBirdPortal.",
     href: "https://life.eurobirdportal.org/news/How-many-birds-are-on-the-move--Towards-quantitative-species-specific-migration-models-1550138239",
-    image: "https://life.eurobirdportal.org/img/ebp-logo.svg",
+    image: "assets/logo_ebp.svg",
   },
 ];
 
@@ -126,23 +125,23 @@ export const datasets = [
     title:
       "Vertical profiles time series of bird density and flight speed vector (01.2018-01.2019)",
     href: "https://doi.org/10.5281/zenodo.3610184",
-    image: "https://about.zenodo.org/static/img/logos/zenodo-gradient-200.png",
-    badge: "https://zenodo.org/badge/DOI/10.5281/zenodo.3610184.svg",
+    image: "assets/logo_zenodo.png",
+    badge: "assets/badge_zenodo_3610184.svg",
   },
   {
     label: "Dataset",
     title: "Interpolated maps of bird density and flight vector over Europe (09.2016-10.2016)",
     href: "https://doi.org/10.5281/zenodo.3243396",
-    image: "https://about.zenodo.org/static/img/logos/zenodo-gradient-200.png",
-    badge: "https://zenodo.org/badge/DOI/10.5281/zenodo.3243396.svg",
+    image: "assets/logo_zenodo.png",
+    badge: "assets/badge_zenodo_3243396.svg",
   },
   {
     label: "Dataset",
     title:
       "Vertical profiles and integrated time series of bird density and flight speed vector (09.2016-10.2016)",
-    href: "https://doi.org/10.5281/zenodo.3243396",
-    image: "https://about.zenodo.org/static/img/logos/zenodo-gradient-200.png",
-    badge: "https://zenodo.org/badge/DOI/10.5281/zenodo.3406402.svg",
+    href: "https://doi.org/10.5281/zenodo.3406402",
+    image: "assets/logo_zenodo.png",
+    badge: "assets/badge_zenodo_3406402.svg",
   },
 ];
 

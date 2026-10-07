@@ -1,9 +1,18 @@
 ---
 import { datasets, partners, presentations, publications, webapps } from "../content.js";
+import "@fontsource/gothic-a1/latin-400.css";
+import "@fontsource/gothic-a1/latin-600.css";
+import "@fontsource/gothic-a1/latin-700.css";
+import "@fontsource/gothic-a1/latin-800.css";
 import globalCss from "../styles/global.css?raw";
 
 const primaryPartners = partners.filter((partner) => partner.tier === "primary");
 const secondaryPartners = partners.filter((partner) => partner.tier === "secondary");
+
+const title = "BMM | Bird Migration Modelling";
+const description = "Bird Migration Modelling: web apps, publications, presentations, and datasets on nocturnal bird migration measured by weather radar.";
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("assets/bmm.png", Astro.site);
 ---
 
 <!doctype html>
@@ -11,8 +20,17 @@ const secondaryPartners = partners.filter((partner) => partner.tier === "seconda
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Bird Migration Modelling resources, web apps, publications, and datasets.">
-    <title>BMM | Bird Migration Modelling</title>
+    <meta name="description" content={description}>
+    <meta name="theme-color" content="#151515">
+    <meta name="color-scheme" content="dark">
+    <title>{title}</title>
+    <link rel="canonical" href={canonical}>
+    <meta property="og:type" content="website">
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={canonical}>
+    <meta property="og:image" content={ogImage}>
+    <meta name="twitter:card" content="summary">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-EFQJ28R6D2"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
@@ -22,11 +40,6 @@ const secondaryPartners = partners.filter((partner) => partner.tier === "seconda
       gtag("js", new Date());
       gtag("config", "G-EFQJ28R6D2");
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css">
-    <script src="https://kit.fontawesome.com/f15ed359e8.js" crossorigin="anonymous"></script>
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <style is:inline set:html={globalCss}></style>
@@ -67,8 +80,8 @@ const secondaryPartners = partners.filter((partner) => partner.tier === "seconda
             </div>
           </div>
           <ul class="social-links">
-            <li><a href="https://raphaelnussbaumer.com/" target="_blank" rel="noopener"><i class="fas fa-globe"></i><span>Personal Website</span></a></li>
-            <li><a href="https://github.com/birdmigrationmap" target="_blank" rel="noopener"><i class="fab fa-github"></i><span>Project Github</span></a></li>
+            <li><a href="https://raphaelnussbaumer.com/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-10 10h20M12 2c2.8 2.7 4 6.1 4 10s-1.2 7.3-4 10c-2.8-2.7-4-6.1-4-10s1.2-7.3 4-10Z"/></svg><span>Personal Website</span></a></li>
+            <li><a href="https://github.com/birdmigrationmap" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg><span>Project Github</span></a></li>
           </ul>
         </footer>
       </aside>
@@ -80,7 +93,7 @@ const secondaryPartners = partners.filter((partner) => partner.tier === "seconda
             {webapps.map((app) => (
               <article class="webapp-card" itemscope itemtype="https://schema.org/CreativeWork">
                 <a href={app.href} target="_blank" rel="noopener">
-                  <img src={app.image} alt="" loading="lazy">
+                  <img src={app.image} alt="" width="140" height="140" loading="lazy" decoding="async">
                   <div>
                     <p class="eyebrow">{app.label}</p>
                     <h3 itemprop="name">{app.title}</h3>
@@ -101,11 +114,11 @@ const secondaryPartners = partners.filter((partner) => partner.tier === "seconda
                   <span class="publication-logo">
                     <img src={publication.image} alt="" loading="lazy">
                   </span>
-                  <span>
+                  <div>
                     <h3 itemprop="name">{publication.title}</h3>
                     <p>{publication.authors}</p>
                     <strong>{publication.venue}</strong>
-                  </span>
+                  </div>
                 </a>
               </article>
             ))}
@@ -121,11 +134,11 @@ const secondaryPartners = partners.filter((partner) => partner.tier === "seconda
                   <span class="publication-logo">
                     <img src={presentation.image} alt="" loading="lazy">
                   </span>
-                  <span>
+                  <div>
                     <h3 itemprop="name">{presentation.title}</h3>
                     <p>{presentation.authors}</p>
                     <strong>{presentation.venue}</strong>
-                  </span>
+                  </div>
                 </a>
               </article>
             ))}
@@ -153,5 +166,22 @@ const secondaryPartners = partners.filter((partner) => partner.tier === "seconda
     </main>
     <div class="page-fade top" aria-hidden="true"></div>
     <div class="page-fade bottom" aria-hidden="true"></div>
+    <script is:inline>
+      // Highlight the sidebar link of the section currently in view.
+      const navLinks = new Map(
+        [...document.querySelectorAll(".section-nav a")].map((link) => [link.hash.slice(1), link]),
+      );
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            for (const link of navLinks.values()) link.removeAttribute("aria-current");
+            navLinks.get(entry.target.id)?.setAttribute("aria-current", "true");
+          }
+        },
+        { rootMargin: "-45% 0px -50% 0px" },
+      );
+      document.querySelectorAll(".section").forEach((section) => observer.observe(section));
+    </script>
   </body>
 </html>

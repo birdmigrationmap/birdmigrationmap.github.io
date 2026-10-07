@@ -170,8 +170,19 @@ ul {
   gap: 8px;
 }
 
+.social-links svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
 .social-links a:hover {
   font-weight: 700;
+}
+
+:focus-visible {
+  outline: 2px solid var(--zenith);
+  outline-offset: 4px;
 }
 
 .content {
@@ -201,7 +212,10 @@ ul {
 
 .hover-group:hover .webapp-card,
 .hover-group:hover .publication,
-.hover-group:hover .dataset-card {
+.hover-group:hover .dataset-card,
+.hover-group:focus-within .webapp-card,
+.hover-group:focus-within .publication,
+.hover-group:focus-within .dataset-card {
   opacity: 0.5;
 }
 
@@ -218,9 +232,11 @@ ul {
 }
 
 .webapp-card:hover,
-.dataset-card:hover {
+.dataset-card:hover,
+.webapp-card:focus-within,
+.dataset-card:focus-within {
   opacity: 1 !important;
-  transform: scale(1.1);
+  transform: scale(1.04);
 }
 
 .webapp-card a {
@@ -267,7 +283,8 @@ h3 {
   transition: opacity 0.2s ease-in-out;
 }
 
-.publication:hover {
+.publication:hover,
+.publication:focus-within {
   opacity: 1 !important;
 }
 
@@ -402,7 +419,7 @@ h3 {
     display: grid;
     gap: 32px;
     margin-top: 32px;
-    color: var(--zenith);
+    color: var(--dawn);
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 3px;
@@ -415,7 +432,8 @@ h3 {
     transition: color 0.2s ease-in-out;
   }
 
-  .section-nav a:hover {
+  .section-nav a:hover,
+  .section-nav a[aria-current] {
     color: var(--zenith);
   }
 
@@ -432,7 +450,8 @@ h3 {
     transition: width 0.2s ease-in-out, background 0.2s ease-in-out;
   }
 
-  .section-nav a:hover i {
+  .section-nav a:hover i,
+  .section-nav a[aria-current] i {
     width: 48px;
     background: var(--zenith);
   }
@@ -514,6 +533,27 @@ h3 {
 
   .webapp-card:hover,
   .dataset-card:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+
+  .webapp-card:hover,
+  .dataset-card:hover,
+  .webapp-card:focus-within,
+  .dataset-card:focus-within,
+  .publication:hover .publication-logo,
+  .partner-logos a:hover {
     transform: none;
   }
 }
