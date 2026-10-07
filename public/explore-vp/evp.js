@@ -230,24 +230,39 @@ function draw() {
   if (scatterLim !== null) traces.push(line(scatterLim, "Lowest usable altitude", "dot"));
 
   const layout = {
-    title: {
-      text: `${g.name} · ${DATASETS[ui.dataset.value].label}<span style="font-size:12px;color:#949495"> · ${formatDuration(resolution)} bins</span>`,
-      x: 0.01,
-      font: { size: 16 },
-    },
+    // Resolution note sits to the right of the range selector buttons.
+    annotations: [
+      {
+        text: `${formatDuration(resolution)} bins`,
+        xref: "paper",
+        yref: "paper",
+        x: 0,
+        y: 1,
+        xshift: 150,
+        yshift: 4,
+        xanchor: "left",
+        yanchor: "bottom",
+        showarrow: false,
+        font: { size: 12, color: "#949495" },
+      },
+    ],
     uirevision: current.key, // keep zoom when only the display options change
     paper_bgcolor: "#151515",
     plot_bgcolor: "#202022",
     font: { color: "#d0d0d2", family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" },
-    margin: { t: 56, r: 24, b: 24, l: 64 },
+    margin: { t: 44, r: 24, b: 24, l: 64 },
     coloraxis,
     showlegend: !narrow,
-    legend: { orientation: "h", x: 1, xanchor: "right", y: 1.06, bgcolor: "rgba(0,0,0,0)" },
+    // Inside the plot so it never collides with the mode bar or the range buttons.
+    legend: { orientation: "h", x: 0.99, xanchor: "right", y: 0.99, yanchor: "top", bgcolor: "rgba(21,21,21,0.6)" },
     xaxis: {
       type: "date",
       gridcolor: "#333336",
       rangeslider: { thickness: 0.08, bgcolor: "#202022" },
       rangeselector: {
+        x: 0,
+        y: 1,
+        yanchor: "bottom",
         bgcolor: "#202022",
         activecolor: "#3b3b3f",
         buttons: [

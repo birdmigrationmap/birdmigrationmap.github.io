@@ -37,48 +37,37 @@
   <body>
     <header class="topbar">
       <a class="brand" href="../" title="Back to Bird Migration Modelling">BMM.</a>
-      <h1>Vertical profiles of bird density</h1>
-      <a class="source" href="https://doi.org/10.5281/zenodo.3610184" target="_blank" rel="noopener"
-        >2018 data archived on Zenodo</a
-      >
+      <h1>Vertical profiles</h1>
 
       <form class="controls" id="controls">
-        <label>
-          <span>Dataset</span>
-          <select id="dataset">
-            <option value="vp-raw">2018 raw</option>
-            <option value="vp-clean">2018 cleaned</option>
-            <option value="vp-2019">2019 raw</option>
-          </select>
-        </label>
-
-        <label>
-          <span>Radar</span>
-          <select id="radar"></select>
-        </label>
-
+        <select id="dataset" aria-label="Dataset">
+          <option value="vp-raw">2018 raw</option>
+          <option value="vp-clean">2018 cleaned</option>
+          <option value="vp-2019">2019 raw</option>
+        </select>
+        <select id="radar" aria-label="Radar"></select>
         <button type="button" id="open-map" title="Choose radar on map">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14" /></svg>
           Map
         </button>
 
         <label class="check"><input type="checkbox" id="hide-zero" /> Hide zeros</label>
-        <label class="check"><input type="checkbox" id="log-scale" /> Log scale</label>
+        <label class="check"><input type="checkbox" id="log-scale" /> Log</label>
 
-        <label>
-          <span>Colour range [bird/km³]</span>
-          <span class="range">
-            <input type="number" id="range-from" min="0" step="any" value="0" aria-label="Minimum" />
-            <span aria-hidden="true">–</span>
-            <input type="number" id="range-to" min="0" step="any" value="200" aria-label="Maximum" />
-          </span>
-        </label>
+        <span class="range" title="Colour range [bird/km³]">
+          <input type="number" id="range-from" min="0" step="any" value="0" aria-label="Colour range minimum [bird/km³]" />
+          <span aria-hidden="true">–</span>
+          <input type="number" id="range-to" min="0" step="any" value="200" aria-label="Colour range maximum [bird/km³]" />
+          <span class="unit">bird/km³</span>
+        </span>
 
         <button type="button" id="open-coverage" title="Data coverage of all radars">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M4 12h16M4 18h7" /></svg>
           Coverage
         </button>
       </form>
+
+      <a class="source" href="https://doi.org/10.5281/zenodo.3610184" target="_blank" rel="noopener" title="2018 data archived on Zenodo">Zenodo ↗</a>
     </header>
 
     <main>
