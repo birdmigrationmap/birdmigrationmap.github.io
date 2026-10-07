@@ -40,6 +40,17 @@ async function fetchJson(url) {
   return response.json();
 }
 
+// Profiles are stored gzipped (about 13x smaller). Decompress in the browser,
+// unless the server already did so via Content-Encoding.
+async function fetchGzipJson(url) {
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  if (bytes[0] !== 0x1f || bytes[1] !== 0x8b) return JSON.parse(new TextDecoder().decode(bytes));
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+  return new Response(stream).json();
+}
+
 function isAvailable(dataset, name) {
   return (available[dataset] || []).includes(name);
 }
@@ -71,7 +82,7 @@ async function loadProfile() {
   const id = ++requestId;
   setStatus(`Loading ${radar} (${DATASETS[dataset].label})…`);
   try {
-    const data = await fetchJson(`./assets/${dataset}/dc_${radar}.json`);
+    const data = await fetchGzipJson(`./assets/${dataset}/dc_${radar}.json.gz`);
     if (id !== requestId) return; // a newer request superseded this one
     viewRange = null;
     current = { key, data: toGrid(data) };

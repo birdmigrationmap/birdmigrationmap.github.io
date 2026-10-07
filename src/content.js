@@ -131,17 +131,17 @@ export const datasets = [
   {
     label: "Dataset",
     title: "Interpolated maps of bird density and flight vector over Europe (09.2016-10.2016)",
-    href: "https://doi.org/10.5281/zenodo.3243396",
+    href: "https://doi.org/10.5281/zenodo.3406402",
     image: "assets/logo_zenodo.png",
-    badge: "assets/badge_zenodo_3243396.svg",
+    badge: "assets/badge_zenodo_3406402.svg",
   },
   {
     label: "Dataset",
     title:
       "Vertical profiles and integrated time series of bird density and flight speed vector (09.2016-10.2016)",
-    href: "https://doi.org/10.5281/zenodo.3406402",
+    href: "https://doi.org/10.5281/zenodo.3405904",
     image: "assets/logo_zenodo.png",
-    badge: "assets/badge_zenodo_3406402.svg",
+    badge: "assets/badge_zenodo_3405904.svg",
   },
 ];
 

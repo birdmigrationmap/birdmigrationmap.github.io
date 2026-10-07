@@ -55,6 +55,16 @@ h1 {
   text-transform: uppercase;
 }
 
+.source {
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.source:hover {
+  color: var(--zenith);
+}
+
 .controls {
   display: flex;
   flex-wrap: wrap;
